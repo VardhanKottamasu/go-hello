@@ -70,6 +70,11 @@ func (cache redisCache) GetMovies() ([]*Movie, error) {
 		fmt.Println("Error retrieving movie list")
 		return nil, err
 	}
+
+	if len(val) == 0 {
+		fmt.Println("Length of movies list is 0")
+		return nil,nil
+	}
 	for _, item := range val {
 		err = json.Unmarshal([]byte(item), movie)
 		if err != nil {
