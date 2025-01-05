@@ -13,7 +13,7 @@ var redisCache = cache.NewRedisCache("localhost:6379", 0, 1)
 func main() {
 	r := gin.Default()
  
-   r.POST("/movies", func(ctx *gin.Context) {
+   r.POST("/addMovie", func(ctx *gin.Context) {
        var movie cache.Movie
        if err := ctx.ShouldBind(&movie); err != nil {
            ctx.JSON(http.StatusBadRequest, gin.H{
@@ -33,7 +33,7 @@ func main() {
        })
  
    })
-   r.GET("/movies", func(ctx *gin.Context) {
+   r.GET("/getMovies", func(ctx *gin.Context) {
        movies, err := redisCache.GetMovies()
        if err != nil {
            ctx.JSON(http.StatusBadRequest, gin.H{
@@ -45,7 +45,7 @@ func main() {
            "movies": movies,
        })
    })
-   r.GET("/movies/:id", func(ctx *gin.Context) {
+   r.GET("/getMovie/:id", func(ctx *gin.Context) {
        id := ctx.Param("id")
        movie, err := redisCache.GetMovie(id)
        if err != nil {
@@ -58,7 +58,7 @@ func main() {
            "movie": movie,
        })
    })
-   r.PUT("/movies/:id", func(ctx *gin.Context) {
+   r.PUT("/updateMovie/:id", func(ctx *gin.Context) {
        id := ctx.Param("id")
        res, err := redisCache.GetMovie(id)
        if err != nil {
@@ -91,7 +91,7 @@ func main() {
            "movie": res,
        })
    })
-   r.DELETE("/movies/:id", func(ctx *gin.Context) {
+   r.DELETE("/deleteMovie/:id", func(ctx *gin.Context) {
        id := ctx.Param("id")
        err := redisCache.DeleteMovie(id)
        if err != nil {

@@ -73,7 +73,7 @@ func (cache redisCache) GetMovies() ([]*Movie, error) {
 
 	if len(val) == 0 {
 		fmt.Println("Length of movies list is 0")
-		return nil,nil
+		return nil, nil
 	}
 	for _, item := range val {
 		err = json.Unmarshal([]byte(item), movie)
@@ -98,24 +98,24 @@ func (cache redisCache) CreateMovie(movie *Movie) (*Movie, error) {
 }
 
 func (cache redisCache) UpdateMovie(movie *Movie) (*Movie, error) {
-	c:=cache.getClient()
-	json,err:=json.Marshal(movie)
-	if err!=nil{
+	c := cache.getClient()
+	json, err := json.Marshal(movie)
+	if err != nil {
 		fmt.Println("Error marshalling movie object")
 		return nil, err
 	}
-	c.HSet("movies",movie.Id, json)
+	c.HSet("movies", movie.Id, json)
 	return movie, nil
 }
 
 func (cache redisCache) DeleteMovie(id string) error {
-	c:=cache.getClient()
-	res, err:=c.HDel("movies",id).Result()
-	if err!=nil {
+	c := cache.getClient()
+	res, err := c.HDel("movies", id).Result()
+	if err != nil {
 		fmt.Println("Error deleting movie")
 		return err
 	}
-	if res>0{
+	if res > 0 {
 		fmt.Println("Deletion Done!!")
 	}
 	return nil
